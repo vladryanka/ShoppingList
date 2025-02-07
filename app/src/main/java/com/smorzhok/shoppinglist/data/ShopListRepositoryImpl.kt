@@ -6,6 +6,13 @@ class ShopListRepositoryImpl : ShopListRepository {
     private val shopList = mutableListOf<ShopItem>()
     private var autoIncrementId = 0
 
+    init{
+        for (i in 0..10){
+            val item = ShopItem("Name $i",i+10 ,true,i)
+            shopList.add(item)
+        }
+    }
+
     override fun deleteShopItem(item: ShopItem) {
         shopList.remove(item)
     }
