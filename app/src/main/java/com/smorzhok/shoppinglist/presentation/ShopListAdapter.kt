@@ -4,25 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.smorzhok.shoppinglist.R
 import com.smorzhok.shoppinglist.data.ShopItem
 
-class ShopListAdapter() : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
-
-    var shopList = listOf<ShopItem>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
 
     var onShopItemLongClickListener: ((ShopItem)->Unit)? = null
     var onShopItemShortClickListener: ((ShopItem) -> Unit)? = null
-
-    class ShopItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameTV = view.findViewById<TextView>(R.id.tv_name)
-        val countTV = view.findViewById<TextView>(R.id.tv_count)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val layout = when (viewType) {
@@ -39,18 +29,14 @@ class ShopListAdapter() : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolde
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = shopList[position]
+        val item = getItem(position)
         if (item.enabled == true)
             return IS_ENABLED
         else return IS_DISABLED
     }
 
-    override fun getItemCount(): Int {
-        return shopList.size
-    }
-
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val shopItem = shopList[position]
+        val shopItem = getItem(position)
         holder.nameTV.text = shopItem.name
         holder.countTV.text = shopItem.count.toString()
         holder.itemView.setOnLongClickListener {
