@@ -1,7 +1,6 @@
 package com.smorzhok.shoppinglist.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -62,7 +61,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupShortClickListener() {
         adapter.onShopItemShortClickListener = {
-            Log.d("Doing", "Short click was performed")
+            val intent = ShopItemActivity.newIntentEditMode(this, it.id)
+            startActivity(intent)
         }
     }
 

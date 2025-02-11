@@ -1,24 +1,22 @@
 package com.smorzhok.shoppinglist.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.smorzhok.shoppinglist.domain.ShopListRepository
+import kotlin.random.Random
 
 object ShopListRepositoryImpl : ShopListRepository {
 
     private val shopListLD = MutableLiveData<List<ShopItem>>()
-    private val shopList = sortedSetOf<ShopItem>({ o1, o2 -> o1.id.compareTo(o2.id) })
+    private val shopList = sortedSetOf<ShopItem>(compareBy { it.id })
     private var autoIncrementId = 0
 
     init {
         for (i in 0..10) {
-            val item = ShopItem("Name $i", i + 10, true, i)
-            shopList.add(item)
+            val item = ShopItem("Name $i", i, Random.nextBoolean())
+            addShopItem(item)
         }
         updateLD()
-        Log.d("Doing", shopList.toString())
-
     }
 
     override fun deleteShopItem(item: ShopItem) {
@@ -42,8 +40,9 @@ object ShopListRepositoryImpl : ShopListRepository {
     }
 
     override fun addShopItem(shopItem: ShopItem) {
-        if (shopItem.id == ShopItem.UNDEFINED_ID)
+        if (shopItem.id == ShopItem.UNDEFINED_ID) {
             shopItem.id = autoIncrementId++
+        }
         shopList.add(shopItem)
         updateLD()
     }

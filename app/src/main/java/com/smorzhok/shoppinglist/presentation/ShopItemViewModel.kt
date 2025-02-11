@@ -31,8 +31,10 @@ class ShopItemViewModel : ViewModel() {
     fun addItem(name: String?, count: String?) {
         val newName = correctName(name)
         val newCount = correctCount(count)
-        if (validateInput(newName, newCount)) {
-            addShopItemUseCase.addShopItem(ShopItem(newName, newCount, true))
+        val fieldsValid = validateInput(newName, newCount)
+        if (fieldsValid) {
+            val shopItem = ShopItem(newName, newCount, true)
+            addShopItemUseCase.addShopItem(shopItem)
             finishWork()
         }
     }
@@ -49,7 +51,7 @@ class ShopItemViewModel : ViewModel() {
         }
     }
 
-    private fun getItemByID(id: Int) {
+    fun getItemByID(id: Int) {
         _shopItem.value = getItemByIDUseCase.getItemById(id)
     }
 
@@ -79,11 +81,11 @@ class ShopItemViewModel : ViewModel() {
         return result
     }
 
-    private fun resetValueInputName(name: String) {
+     fun resetValueInputName() {
         _errorInputName.value = false
     }
 
-    private fun resetValueInputCount(count: String) {
+     fun resetValueInputCount() {
         _errorInputCount.value = false
     }
 
