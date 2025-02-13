@@ -3,6 +3,7 @@ package com.smorzhok.shoppinglist.presentation
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -14,11 +15,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ShopListAdapter
     private lateinit var button: FloatingActionButton
+    private var shopItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        shopItemContainer = findViewById(R.id.fragmentContainer)
         button = findViewById(R.id.floatingActionButton)
         setRV()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
