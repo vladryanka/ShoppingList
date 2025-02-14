@@ -23,6 +23,7 @@ class ShopItemFragment : Fragment() {
     private lateinit var textEditCount: EditText
     private lateinit var buttonSave: Button
     private lateinit var viewModel: ShopItemViewModel
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
     private var screenMode = EXTRA_MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
 
@@ -41,6 +42,14 @@ class ShopItemFragment : Fragment() {
         addTextChangeListeners()
         launchRightMode()
         observeViewModel()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener)
+            onEditingFinishedListener = context
+        else
+            throw RuntimeException("Activity should implement onEditingFinishedListener")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +86,10 @@ class ShopItemFragment : Fragment() {
         }
     }
 
+
+    interface OnEditingFinishedListener {
+        fun onEditingFinished()
+    }
 
 
     private fun addTextChangeListeners() {
@@ -140,7 +153,7 @@ class ShopItemFragment : Fragment() {
         }
     }
 
-    private fun initViews(view:View) {
+    private fun initViews(view: View) {
         textEditName = view.findViewById(R.id.textEditName)
         textEditCount = view.findViewById(R.id.textEditCount)
         buttonSave = view.findViewById(R.id.buttonSave)
@@ -154,7 +167,7 @@ class ShopItemFragment : Fragment() {
         private const val EXTRA_ADD = "extra_add"
         private const val EXTRA_EDIT = "extra_edit"
         private const val EXTRA_MODE_UNKNOWN = ""
-        fun newInstanceAddItem():ShopItemFragment{
+        fun newInstanceAddItem(): ShopItemFragment {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(EXTRA_MODE, EXTRA_ADD)
@@ -162,7 +175,7 @@ class ShopItemFragment : Fragment() {
             }
         }
 
-        fun newInstanceEditItem(shopItemId:Int):ShopItemFragment{
+        fun newInstanceEditItem(shopItemId: Int): ShopItemFragment {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(EXTRA_MODE, EXTRA_EDIT)
