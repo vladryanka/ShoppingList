@@ -29,9 +29,27 @@ class MainActivity : AppCompatActivity() {
             adapter.submitList(it)
         }
         button.setOnClickListener {
-            val intent = ShopItemActivity.newIntentAddMode(this)
-            startActivity(intent)
+            if(isOnePaneMode()){
+                val intent = ShopItemActivity.newIntentAddMode(this)
+                startActivity(intent)
+            }
+            else {
+                launchFragment(ShopItemFragment.newInstanceAddItem())
+            }
+
         }
+    }
+
+    private fun isOnePaneMode(): Boolean{
+        return shopItemContainer == null
+    }
+
+    private fun launchFragment(fragment:ShopItemFragment){
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentContainer,fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setRV() {
@@ -64,8 +82,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupShortClickListener() {
         adapter.onShopItemShortClickListener = {
-            val intent = ShopItemActivity.newIntentEditMode(this, it.id)
-            startActivity(intent)
+            if (isOnePaneMode()) {
+                val intent = ShopItemActivity.newIntentEditMode(this, it.id)
+                startActivity(intent)
+            } else {
+                launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
+            }
         }
     }
 

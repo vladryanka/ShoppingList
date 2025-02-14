@@ -3,23 +3,11 @@ package com.smorzhok.shoppinglist.presentation
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.Button
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.textfield.TextInputLayout
 import com.smorzhok.shoppinglist.R
 import com.smorzhok.shoppinglist.data.ShopItem
 
 class ShopItemActivity : AppCompatActivity() {
-    private lateinit var textInputLayoutCount: TextInputLayout
-    private lateinit var textInputLayoutName: TextInputLayout
-    private lateinit var textEditName: EditText
-    private lateinit var textEditCount: EditText
-    private lateinit var buttonSave: Button
-    private lateinit var viewModel: ShopItemViewModel
     private var screenMode = EXTRA_MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
 
@@ -27,30 +15,8 @@ class ShopItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
         parseIntent()
-        launchRightMode()
-        observeViewModel()
-    }
-
-    private fun observeViewModel() {
-        viewModel.errorInputCount.observe(this) {
-            val message = if (it) {
-                getString(R.string.error_input_count)
-            } else {
-                null
-            }
-            textInputLayoutCount.error = message
-        }
-        viewModel.errorInputName.observe(this) {
-            val message = if (it) {
-                getString(R.string.error_input_name)
-            } else {
-                null
-            }
-            textInputLayoutName.error = message
-        }
-        viewModel.isSaved.observe(this) {
-            finish()
-        }
+        if (savedInstanceState == null)
+            launchRightMode()
     }
 
     private fun launchRightMode() {
@@ -60,51 +26,8 @@ class ShopItemActivity : AppCompatActivity() {
             else -> throw RuntimeException("Unknown screen mode $screenMode")
         }
         supportFragmentManager.beginTransaction()
-            .add(R.id.shop_item_container, fragment)
+            .replace(R.id.shop_item_container, fragment)
             .commit()
-    }
-
-    private fun addTextChangeListeners() {
-        textEditName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.resetValueInputName()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
-        textEditCount.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.resetValueInputCount()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-    }
-
-    private fun launchEditMode() {
-        viewModel.getItemByID(shopItemId)
-        viewModel.shopItem.observe(this) {
-            textEditName.setText(it.name)
-            textEditCount.setText(it.count.toString())
-        }
-        buttonSave.setOnClickListener {
-            viewModel.editItem(textEditName.text?.toString(), textEditCount.text?.toString())
-        }
-    }
-
-    private fun launchAddMode() {
-        buttonSave.setOnClickListener {
-            viewModel.addItem(textEditName.text?.toString(), textEditCount.text?.toString())
-        }
     }
 
     private fun parseIntent() {
@@ -122,14 +45,6 @@ class ShopItemActivity : AppCompatActivity() {
             }
             shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
         }
-    }
-
-    private fun initViews() {
-        textEditName = findViewById(R.id.textEditName)
-        textEditCount = findViewById(R.id.textEditCount)
-        buttonSave = findViewById(R.id.buttonSave)
-        textInputLayoutCount = findViewById(R.id.textInputLayoutCount)
-        textInputLayoutName = findViewById(R.id.textInputLayoutName)
     }
 
     companion object {
