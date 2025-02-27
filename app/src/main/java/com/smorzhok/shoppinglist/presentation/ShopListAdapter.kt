@@ -1,19 +1,14 @@
 package com.smorzhok.shoppinglist.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.databinding.ViewDataBindingKtx
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.smorzhok.shoppinglist.R
 import com.smorzhok.shoppinglist.data.ShopItem
 import com.smorzhok.shoppinglist.databinding.ShopItemDisabledBinding
 import com.smorzhok.shoppinglist.databinding.ShopItemEnabledBinding
-import java.util.zip.Inflater
 
 class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
 
@@ -38,9 +33,9 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCa
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        if (item.enabled == true)
-            return IS_ENABLED
-        else return IS_DISABLED
+        return if (item.enabled == true)
+            IS_ENABLED
+        else IS_DISABLED
     }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
@@ -48,12 +43,10 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCa
         val binding = holder.binding
         when (binding) {
             is ShopItemDisabledBinding -> {
-                binding.tvName.text = shopItem.name
-                binding.tvCount.text = shopItem.count.toString()
+                binding.shopItem = shopItem
             }
             is ShopItemEnabledBinding -> {
-                binding.tvName.text = shopItem.name
-                binding.tvCount.text = shopItem.count.toString()
+                binding.shopItem = shopItem
             }
         }
         binding.root.setOnLongClickListener {
