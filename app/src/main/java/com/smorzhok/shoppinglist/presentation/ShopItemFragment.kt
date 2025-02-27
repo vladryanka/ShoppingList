@@ -179,7 +179,7 @@ class ShopItemFragment : Fragment() {
             return ShopItemFragment().apply {
                 arguments = Bundle().apply {
                     putString(EXTRA_MODE, EXTRA_EDIT)
-                    putInt(EXTRA_MODE, shopItemId)
+                    putInt(EXTRA_SHOP_ITEM_ID, shopItemId)
                 }
             }
         }

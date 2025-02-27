@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.smorzhok.shoppinglist.R
 import com.smorzhok.shoppinglist.data.ShopItem
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
     private var screenMode = EXTRA_MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
 
@@ -65,5 +65,9 @@ class ShopItemActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_SHOP_ITEM_ID, id)
             return intent
         }
+    }
+
+    override fun onEditingFinished() {
+        finish()
     }
 }
