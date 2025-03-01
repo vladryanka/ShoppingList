@@ -1,7 +1,7 @@
 package com.smorzhok.shoppinglist.presentation
 
 import androidx.recyclerview.widget.DiffUtil
-import com.smorzhok.shoppinglist.data.ShopItem
+import com.smorzhok.shoppinglist.domain.ShopItem
 
 class ShopItemDiffCallback: DiffUtil.ItemCallback<ShopItem>() {
     override fun areItemsTheSame(oldItem: ShopItem, newItem: ShopItem): Boolean {

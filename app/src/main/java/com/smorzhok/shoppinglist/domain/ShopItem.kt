@@ -1,4 +1,4 @@
-package com.smorzhok.shoppinglist.data
+package com.smorzhok.shoppinglist.domain
 
 data class ShopItem(
     val name:String,

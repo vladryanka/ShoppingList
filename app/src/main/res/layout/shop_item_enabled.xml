@@ -3,7 +3,7 @@
     <data>
         <variable
             name="shopItem"
-            type="com.smorzhok.shoppinglist.data.ShopItem" />
+            type="com.smorzhok.shoppinglist.domain.ShopItem" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

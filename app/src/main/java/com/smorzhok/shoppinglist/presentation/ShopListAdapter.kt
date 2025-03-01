@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.smorzhok.shoppinglist.R
-import com.smorzhok.shoppinglist.data.ShopItem
+import com.smorzhok.shoppinglist.domain.ShopItem
 import com.smorzhok.shoppinglist.databinding.ShopItemDisabledBinding
 import com.smorzhok.shoppinglist.databinding.ShopItemEnabledBinding
 

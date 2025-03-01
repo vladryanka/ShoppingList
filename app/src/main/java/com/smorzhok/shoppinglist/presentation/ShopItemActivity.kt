@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.smorzhok.shoppinglist.R
-import com.smorzhok.shoppinglist.data.ShopItem
+import com.smorzhok.shoppinglist.domain.ShopItem
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
     private var screenMode = EXTRA_MODE_UNKNOWN

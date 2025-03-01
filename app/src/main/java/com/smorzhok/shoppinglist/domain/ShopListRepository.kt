@@ -1,7 +1,6 @@
 package com.smorzhok.shoppinglist.domain
 
 import androidx.lifecycle.LiveData
-import com.smorzhok.shoppinglist.data.ShopItem
 
 interface ShopListRepository {
     fun deleteShopItem(item: ShopItem)

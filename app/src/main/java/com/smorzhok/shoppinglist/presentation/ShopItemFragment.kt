@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.smorzhok.shoppinglist.data.ShopItem
+import com.smorzhok.shoppinglist.domain.ShopItem
 import com.smorzhok.shoppinglist.databinding.FragmentShopItemBinding
 
 class ShopItemFragment : Fragment() {

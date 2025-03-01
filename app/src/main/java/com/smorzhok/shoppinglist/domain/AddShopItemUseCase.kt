@@ -1,7 +1,5 @@
 package com.smorzhok.shoppinglist.domain
 
-import com.smorzhok.shoppinglist.data.ShopItem
-
 class AddShopItemUseCase(private val shopListRepository:ShopListRepository) {
 
     fun addShopItem(shopItem: ShopItem){
