@@ -2,6 +2,7 @@ package com.smorzhok.shoppinglist.data
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.smorzhok.shoppinglist.domain.ShopItem
 import com.smorzhok.shoppinglist.domain.ShopListRepository
 
@@ -23,8 +24,12 @@ class ShopListRepositoryImpl(application: Application) : ShopListRepository {
     }
 
     override fun getShopList(): LiveData<List<ShopItem>> {
-    TODO()
-    //return shopListDao.getShopList()
+        val mediator = MediatorLiveData<List<ShopItem>>().apply {
+            addSource(shopListDao.getShopList()) {
+                value = mapper.mapListDbModelToListEntity(it)
+            }
+        }
+        return mediator
     }
 
     override fun addShopItem(shopItem: ShopItem) {
