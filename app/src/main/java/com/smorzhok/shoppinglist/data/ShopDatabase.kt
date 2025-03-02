@@ -20,7 +20,8 @@ abstract class ShopDatabase : RoomDatabase() {
             }
             synchronized(LOCK) {
                 INSTANCE?.let { return it }
-                val db = Room.databaseBuilder(application, ShopDatabase::class.java, DB_NAME).build()
+                val db = Room.databaseBuilder(application, ShopDatabase::class.java, DB_NAME)
+                    .build()
                 INSTANCE = db
                 return db
             }

@@ -4,13 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.smorzhok.shoppinglist.data.ShopListRepositoryImpl
 import com.smorzhok.shoppinglist.domain.AddShopItemUseCase
 import com.smorzhok.shoppinglist.domain.EditShopItemUseCase
 import com.smorzhok.shoppinglist.domain.GetItemByIDUseCase
 import com.smorzhok.shoppinglist.domain.ShopItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class ShopItemViewModel(application:Application) : AndroidViewModel(application) {
+class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = ShopListRepositoryImpl(application)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
@@ -34,9 +38,13 @@ class ShopItemViewModel(application:Application) : AndroidViewModel(application)
         val newCount = correctCount(count)
         val fieldsValid = validateInput(newName, newCount)
         if (fieldsValid) {
-            val shopItem = ShopItem(newName, newCount, true)
-            addShopItemUseCase.addShopItem(shopItem)
-            finishWork()
+            viewModelScope.launch {
+                val shopItem = ShopItem(newName, newCount, true)
+                addShopItemUseCase.addShopItem(shopItem)
+                withContext(Dispatchers.Main) {
+                    finishWork()
+                }
+            }
         }
     }
 
@@ -45,15 +53,19 @@ class ShopItemViewModel(application:Application) : AndroidViewModel(application)
         val newCount = correctCount(count)
         if (validateInput(newName, newCount)) {
             _shopItem.value?.let {
-                val newShopItem = it.copy(newName,newCount)
-                editShopItemUseCase.editShopItem(newShopItem)
-                finishWork()
+                viewModelScope.launch {
+                    val newShopItem = it.copy(name = newName, count = newCount)
+                    editShopItemUseCase.editShopItem(newShopItem)
+                    withContext(Dispatchers.Main) {
+                        finishWork()
+                    }
+                }
             }
         }
     }
 
     fun getItemByID(id: Int) {
-        _shopItem.value = getItemByIDUseCase.getItemById(id)
+        viewModelScope.launch { _shopItem.value = getItemByIDUseCase.getItemById(id) }
     }
 
     private fun correctName(name: String?): String {
@@ -82,15 +94,15 @@ class ShopItemViewModel(application:Application) : AndroidViewModel(application)
         return result
     }
 
-     fun resetValueInputName() {
+    fun resetValueInputName() {
         _errorInputName.value = false
     }
 
-     fun resetValueInputCount() {
+    fun resetValueInputCount() {
         _errorInputCount.value = false
     }
 
-    private fun finishWork(){
+    private fun finishWork() {
         _isSaved.value = Unit
     }
 }

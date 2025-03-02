@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
     private fun setRV() {
         adapter = ShopListAdapter()
         with(binding.recyclerView) {
-            adapter = adapter
+            this.adapter = this@MainActivity.adapter
             recycledViewPool.setMaxRecycledViews(
                 ShopListAdapter.IS_ENABLED,
                 ShopListAdapter.MAX_POOL_SIZE
