@@ -1,7 +1,6 @@
 package com.smorzhok.shoppinglist.presentation
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.smorzhok.shoppinglist.data.ShopListRepositoryImpl
 import com.smorzhok.shoppinglist.domain.DeleteShopItemUseCase
@@ -9,12 +8,14 @@ import com.smorzhok.shoppinglist.domain.EditShopItemUseCase
 import com.smorzhok.shoppinglist.domain.GetShopListUseCase
 import com.smorzhok.shoppinglist.domain.ShopItem
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = ShopListRepositoryImpl(application)
-    private val getShopListUseCase = GetShopListUseCase(repository)
-    private val deleteShopItemUseCase = DeleteShopItemUseCase(repository)
-    private val editShopItemUseCase = EditShopItemUseCase(repository)
+class MainViewModel @Inject constructor(
+    private val repository: ShopListRepositoryImpl,
+    private val getShopListUseCase: GetShopListUseCase,
+    private val deleteShopItemUseCase: DeleteShopItemUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase
+) : ViewModel() {
 
     val shopList = getShopListUseCase.getShopList()
 
@@ -23,9 +24,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-     fun changeEnableState(item: ShopItem) {
+    fun changeEnableState(item: ShopItem) {
         val newItem = ShopItem(item.name, item.count, !item.enabled, item.id)
-         viewModelScope.launch { editShopItemUseCase.editShopItem(newItem) }
+        viewModelScope.launch { editShopItemUseCase.editShopItem(newItem) }
 
     }
 

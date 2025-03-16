@@ -1,15 +1,17 @@
 package com.smorzhok.shoppinglist.data
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.smorzhok.shoppinglist.di.ApplicationScope
 import com.smorzhok.shoppinglist.domain.ShopItem
 import com.smorzhok.shoppinglist.domain.ShopListRepository
+import javax.inject.Inject
 
-class ShopListRepositoryImpl(application: Application) : ShopListRepository {
-    private val shopListDao = ShopDatabase.getInstance(application).shopListDao()
-    private val mapper = ShopListMapper()
-
+@ApplicationScope
+class ShopListRepositoryImpl @Inject constructor(
+    private val shopListDao: ShopListDao,
+    private val mapper: ShopListMapper
+) : ShopListRepository {
 
     override suspend fun deleteShopItem(item: ShopItem) {
         shopListDao.deleteShopItem(item.id)

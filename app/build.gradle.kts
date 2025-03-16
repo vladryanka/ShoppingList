@@ -54,4 +54,8 @@ dependencies {
     implementation(libs.room)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+
+    implementation(libs.dagger2)
+    ksp(libs.dagger2.compiler)
+    ksp(libs.dagger2.android.processor)
 }

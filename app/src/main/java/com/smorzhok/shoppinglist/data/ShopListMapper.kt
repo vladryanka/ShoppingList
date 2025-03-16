@@ -1,8 +1,9 @@
 package com.smorzhok.shoppinglist.data
 
 import com.smorzhok.shoppinglist.domain.ShopItem
+import javax.inject.Inject
 
-class ShopListMapper {
+class ShopListMapper @Inject constructor() {
     fun mapEntityToDbModel(shopItem: ShopItem): ShopItemDbModel {
         return ShopItemDbModel(
             shopItem.id,
