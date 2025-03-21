@@ -5,14 +5,22 @@ import android.content.ContentValues
 import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
-import android.util.Log
+import com.smorzhok.shoppinglist.ShopApp
+import javax.inject.Inject
 
 class ShopListProvider : ContentProvider() {
+    private val component by lazy {
+        (context as ShopApp).component
+    }
+
+    @Inject
+    lateinit var shopListDao: ShopListDao
     private val uriMatcher = UriMatcher(UriMatcher.NO_MATCH).apply {
         addURI("com.smorzhok.shoppinglist", "shop_item", GET_SHOP_ITEMS_QUERY)
     }
 
     override fun onCreate(): Boolean {
+        component.inject(this)
         return true
     }
 
@@ -26,11 +34,12 @@ class ShopListProvider : ContentProvider() {
         val code = uriMatcher.match(uri)
         when (code) {
             GET_SHOP_ITEMS_QUERY -> {
-
+                return shopListDao.getShopListCursor()
+            }
+            else -> {
+                return null
             }
         }
-        Log.d("Doing", "query $uri code $code")
-        return null
     }
 
     override fun getType(uri: Uri): String? {
