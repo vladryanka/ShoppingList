@@ -36,6 +36,7 @@ class ShopListProvider : ContentProvider() {
             GET_SHOP_ITEMS_QUERY -> {
                 return shopListDao.getShopListCursor()
             }
+
             else -> {
                 return null
             }
@@ -47,7 +48,26 @@ class ShopListProvider : ContentProvider() {
     }
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        TODO("Not yet implemented")
+        when (uriMatcher.match(uri)) {
+            GET_SHOP_ITEMS_QUERY -> {
+                if (values == null) return null
+                val id = values.getAsInteger("id")
+                val name = values.getAsString("name")
+                val count = values.getAsInteger("count")
+                val enabled = values.getAsBoolean("enabled")
+
+                val shopItem = ShopItemDbModel(
+                    id = id,
+                    name = name,
+                    count = count,
+                    enabled = enabled,
+                )
+                shopListDao.addShopItemSync(shopItem)
+            }
+        }
+        return null
+
+
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {

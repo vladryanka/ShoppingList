@@ -1,6 +1,8 @@
 package com.smorzhok.shoppinglist.presentation
 
+import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +15,7 @@ import com.smorzhok.shoppinglist.ShopApp
 import com.smorzhok.shoppinglist.databinding.FragmentShopItemBinding
 import com.smorzhok.shoppinglist.domain.ShopItem
 import javax.inject.Inject
+import kotlin.concurrent.thread
 
 class ShopItemFragment : Fragment() {
     private lateinit var viewModel: ShopItemViewModel
@@ -122,10 +125,21 @@ class ShopItemFragment : Fragment() {
 
     private fun launchAddMode() {
         binding.buttonSave.setOnClickListener {
-            viewModel.addItem(
-                binding.textEditName.text?.toString(),
-                binding.textEditCount.text?.toString()
-            )
+//            viewModel.addItem(
+//                binding.textEditName.text?.toString(),
+//                binding.textEditCount.text?.toString()
+//            )
+            thread {
+                context?.contentResolver?.insert(
+                    Uri.parse("content://com.sumin.shoppinglist/shop_items"),
+                    ContentValues().apply {
+                        put("id", 0)
+                        put("name", binding.textEditName.text?.toString())
+                        put("count", binding.textEditCount.text?.toString()?.toInt())
+                        put("enabled", true)
+                    }
+                )
+            }
         }
     }
 

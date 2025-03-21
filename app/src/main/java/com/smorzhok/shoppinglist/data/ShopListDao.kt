@@ -22,4 +22,7 @@ interface ShopListDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addShopItem(shopItem: ShopItemDbModel)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addShopItemSync(shopItem: ShopItemDbModel)
 }
